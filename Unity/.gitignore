@@ -6,19 +6,11 @@
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 
-# ── Asset Store packages (re-import from Unity Asset Store) ──────────────
-# These are large binary downloads — excluded to keep the repo lean.
-# See README for which packages to install after cloning.
-Assets/Avatar/
-Assets/ModularHousePack1/
-Assets/Tables and Chairs/
-Assets/GeniusCrate_Games/
-Assets/New Solution Studio/
-Assets/TextMesh Pro/
+# Asset Store packages intentionally TRACKED (private repo, turnkey clone)
+# Only exclude project recovery / screenshots:
 Assets/_Recovery/
-Assets/SimpleHands/Source/
-Assets/SimpleHands/Demo/
 Assets/Screenshots/
+
 *.pidb
 *.suo
 *.user
@@ -27,6 +19,5 @@ Assets/Screenshots/
 *.booproj
 *.csproj
 *.sln
-*.suo
 .vs/
 .idea/

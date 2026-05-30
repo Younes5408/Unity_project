@@ -17,16 +17,9 @@ Unity/.idea/
 Unity/UpgradeLog*.htm
 Unity/main_cam_editmode.png
 
-# Asset Store packages — re-import from Unity Asset Store
-Unity/Assets/Avatar/
-Unity/Assets/ModularHousePack1/
-Unity/Assets/Tables and Chairs/
-Unity/Assets/GeniusCrate_Games/
-Unity/Assets/New Solution Studio/
-Unity/Assets/TextMesh Pro/
+# Asset Store packages intentionally TRACKED (private repo, turnkey clone)
+# Keep these out only:
 Unity/Assets/_Recovery/
-Unity/Assets/SimpleHands/Source/
-Unity/Assets/SimpleHands/Demo/
 Unity/Assets/Screenshots/
 
 # ── Backend (Python) ──────────────────────────────────────────────
