@@ -226,8 +226,3 @@ Voici une liste non-exhaustive des phrases en français comprises par l'assistan
 | **Historique** | *"Annule ce que je viens de faire"* | `annuler_derniere_action()` |
 | **Statistiques** | *"Affiche le tableau de bord"* / *"Ferme le dashboard"* | `dashboard(action="open"/"close")` |
 
----
-
-## 👤 Auteurs
-
-* **Younes Lyazidi** & **AYA** — Projet de recherche sur les interfaces utilisateur multimodales en réalité virtuelle pilotées par l'intelligence artificielle.
