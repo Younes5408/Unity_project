@@ -61,6 +61,10 @@ FURNITURE_CATALOG = {
     "kitchen1":       {"prefab": "Furniture/Kitchen_Set01", "category": "furniture"},
     "kitchen2":       {"prefab": "Furniture/Kitchen_Set02", "category": "furniture"},
     "kitchen3":       {"prefab": "Furniture/Kitchen_Set03", "category": "furniture"},
+    "lampe":          {"prefab": "Furniture/Large_round_lamp", "category": "furniture"},
+    "lampe1":         {"prefab": "Furniture/Large_round_lamp", "category": "furniture"},
+    "lampe2":         {"prefab": "Furniture/Small_roof_lamp", "category": "furniture"},
+    "lampe3":         {"prefab": "Furniture/Classic_fluorescent_lamp", "category": "furniture"},
 }
 
 

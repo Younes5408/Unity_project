@@ -541,9 +541,13 @@ def placer_objet(object_name: str, rotation_y: float = 0.0) -> str:
     position_x, position_z = build_position_ctx.get()
     placement_id = f"obj_{object_name}_{datetime.now().strftime('%Y%m%d%H%M%S%f')}"
 
-    # Furniture uses floor-aware placement (Unity raycasts down to ground);
-    # all other categories use the default 3m-ahead spawn at y=0.
-    placement_strategy = "floor_aware" if resolved["category"] == "furniture" else "default"
+    # Set specific placement strategies for lights and furniture
+    if object_name in ("lampe", "lampe1", "lampe2", "lampe3"):
+        placement_strategy = "ceiling_aware"
+    elif object_name == "lampadaire" or resolved["category"] == "furniture":
+        placement_strategy = "floor_aware"
+    else:
+        placement_strategy = "default"
 
     placement = {
         "id": placement_id,
