@@ -628,9 +628,27 @@ async def get_catalog():
 
 
 @app.post("/api/placements/{placement_id}/confirm")
-async def confirm_placement(placement_id: str):
+async def confirm_placement(placement_id: str, req: Optional[dict] = None):
     try:
-        placements_col.update_one({"id": placement_id}, {"$set": {"status": "placed"}})
+        update_data = {"status": "placed"}
+        if req:
+            x = req.get("x")
+            y = req.get("y")
+            z = req.get("z")
+            if x is not None and y is not None and z is not None:
+                update_data["position"] = {"x": float(x), "y": float(y), "z": float(z)}
+            
+            rx = req.get("rotation_x")
+            ry = req.get("rotation_y")
+            rz = req.get("rotation_z")
+            if rx is not None:
+                update_data["rotation_x"] = float(rx)
+            if ry is not None:
+                update_data["rotation_y"] = float(ry)
+            if rz is not None:
+                update_data["rotation_z"] = float(rz)
+
+        placements_col.update_one({"id": placement_id}, {"$set": update_data})
         return {"status": "ok", "placement_id": placement_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

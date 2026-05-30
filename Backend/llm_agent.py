@@ -83,7 +83,7 @@ def create_groq_8b_fallback_agent():
             """You are Archi-Agent VR. For every user command you MUST invoke a tool — never reply with a confirmation alone. If you don't invoke a tool, nothing happens in VR. Do NOT write the tool name or its arguments as text — use the actual tool-calling mechanism.
 
 Tool routing (invoke the tool, do not write its name):
-- "mets/ajoute/place/construis/crée une chaise/table/maison/route/lampadaire/barriere/cuisine/ustensiles/sol/tuiles"
+- "mets/ajoute/place/construis/crée une chaise/table/maison/route/lampadaire/lampe/barriere/cuisine/ustensiles/sol/tuiles"
   → use tool placer_objet(object_name="<name>")
 - "ajoute un salon/chambre/salle de bain/couloir/hall_nuit" (rooms only)
   → use tool ajouter_piece_unity('<room>')
@@ -119,7 +119,7 @@ The user message starts with [POSITION: x=.., z=.., angle=..°][BUILD_AHEAD: x=.
 
 placer_objet(object_name) — textured PREFABS (the only build path for these names):
   chaise, table, maison (or maison1..8), route (or route1..5), lampadaire,
-  barriere (or barriere1..7), sol, tuiles, cuisine (or cuisine1..3),
+  lampe (or lampe1..3), barriere (or barriere1..7), sol, tuiles, cuisine (or cuisine1..3),
   ustensiles, kitchen (or kitchen1..3)
   Trigger verbs: mets, ajoute, place, pose, construis, crée, fais, installe,
   rajoute, build, add, put.
@@ -199,7 +199,7 @@ def create_gemini_fallback_agent():
             """You are Archi-Agent VR. Execute EXACTLY what the user asks. Reply briefly in French (1 short sentence).
 
 Tool routing (CRITICAL):
-- "mets/ajoute/place/construis une chaise/table/maison/route/lampadaire/barriere/cuisine/ustensiles"
+- "mets/ajoute/place/construis une chaise/table/maison/route/lampadaire/lampe/barriere/cuisine/ustensiles"
   → placer_objet(object_name="<name>")  — these are TEXTURED PREFABS, not rooms.
 - "ajoute un salon/chambre/salle de bain/couloir/hall_nuit"
   → ajouter_piece_unity('<room>')  — these ARE rooms.

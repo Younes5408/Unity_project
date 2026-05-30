@@ -18,7 +18,9 @@ uvicorn[standard]
 
 # Validation & Config
 pydantic
-pydantic-settings
-
 # Utilitaires
 httpx
+
+# Dépendances Vocales & Fallback Google API
+google-generativeai
+edge-tts

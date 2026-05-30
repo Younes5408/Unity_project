@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.InputSystem;
+using CommonUsages = UnityEngine.XR.CommonUsages;
 
 /// <summary>
 /// Unified hand controller for the Animated Hands asset.
@@ -147,8 +149,24 @@ public class HandPresence : MonoBehaviour
         transform.rotation = camT.rotation * Quaternion.Euler(rotOffs);
 
         // Animator: which key for this hand?
-        KeyCode key = handedness == Handedness.Right ? pcRightGripKey : pcLeftGripKey;
-        float closed = Input.GetKey(key) ? 1f : 0f;
+        bool gripKeyPressed = false;
+        bool gripKeyDown = false;
+        bool gripKeyUp = false;
+
+        var keyboard = Keyboard.current;
+        if (keyboard != null)
+        {
+            Key targetKey = handedness == Handedness.Right ? Key.J : Key.H;
+            var keyControl = keyboard[targetKey];
+            if (keyControl != null)
+            {
+                gripKeyPressed = keyControl.isPressed;
+                gripKeyDown = keyControl.wasPressedThisFrame;
+                gripKeyUp = keyControl.wasReleasedThisFrame;
+            }
+        }
+
+        float closed = gripKeyPressed ? 1f : 0f;
         // Drive both Grip and Trigger so any blend-tree branch responds —
         // result is the closed-fist pose. If you want pinch instead, set
         // triggerParam alone via a different keybind.
@@ -158,8 +176,8 @@ public class HandPresence : MonoBehaviour
         // VR mode gets grab "for free" via XRDirectInteractor reacting to
         // the controller grip — PC mode has no XR controller so we do this
         // manually here, matching the old PCHandSimulator behaviour.
-        if (Input.GetKeyDown(key)) TryGrabPC();
-        if (Input.GetKeyUp(key))   ReleasePC();
+        if (gripKeyDown) TryGrabPC();
+        if (gripKeyUp)   ReleasePC();
     }
 
     void TryGrabPC()
