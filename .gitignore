@@ -33,7 +33,7 @@ Unity/Assets/Screenshots/
 Backend/__pycache__/
 Backend/*.pyc
 Backend/*.log
-Backend/.env
+# Backend/.env intentionally tracked — private repo, keys included for convenience
 Backend/venv/
 Backend/.venv/
 Backend/.pytest_cache/
