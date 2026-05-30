@@ -1,0 +1,24 @@
+# --- Framework IA & LLM ---
+agno==1.0.0
+openai>=1.15.0
+groq==1.2.0
+python-dotenv==1.0.1
+
+# --- Traitement Vocal (Voix <-> Texte) ---
+gTTS==2.5.1
+
+# --- Build Tools ---
+setuptools<82
+wheel
+pymongo==4.6.0  
+
+# API & Serveur
+fastapi
+uvicorn[standard]
+
+# Validation & Config
+pydantic
+pydantic-settings
+
+# Utilitaires
+httpx

@@ -1,0 +1,32 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# ── Asset Store packages (re-import from Unity Asset Store) ──────────────
+# These are large binary downloads — excluded to keep the repo lean.
+# See README for which packages to install after cloning.
+Assets/Avatar/
+Assets/ModularHousePack1/
+Assets/Tables and Chairs/
+Assets/GeniusCrate_Games/
+Assets/New Solution Studio/
+Assets/TextMesh Pro/
+Assets/_Recovery/
+Assets/SimpleHands/Source/
+Assets/SimpleHands/Demo/
+Assets/Screenshots/
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.unityproj
+*.booproj
+*.csproj
+*.sln
+*.suo
+.vs/
+.idea/

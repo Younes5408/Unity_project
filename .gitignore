@@ -1,0 +1,44 @@
+# ── Unity ─────────────────────────────────────────────────────────
+Unity/[Ll]ibrary/
+Unity/[Tt]emp/
+Unity/[Oo]bj/
+Unity/[Bb]uild/
+Unity/[Bb]uilds/
+Unity/[Ll]ogs/
+Unity/[Uu]ser[Ss]ettings/
+Unity/*.csproj
+Unity/*.sln
+Unity/*.suo
+Unity/*.user
+Unity/*.unityproj
+Unity/.vs/
+Unity/.vsconfig
+Unity/.idea/
+Unity/UpgradeLog*.htm
+Unity/main_cam_editmode.png
+
+# Asset Store packages — re-import from Unity Asset Store
+Unity/Assets/Avatar/
+Unity/Assets/ModularHousePack1/
+Unity/Assets/Tables and Chairs/
+Unity/Assets/GeniusCrate_Games/
+Unity/Assets/New Solution Studio/
+Unity/Assets/TextMesh Pro/
+Unity/Assets/_Recovery/
+Unity/Assets/SimpleHands/Source/
+Unity/Assets/SimpleHands/Demo/
+Unity/Assets/Screenshots/
+
+# ── Backend (Python) ──────────────────────────────────────────────
+Backend/__pycache__/
+Backend/*.pyc
+Backend/*.log
+Backend/.env
+Backend/venv/
+Backend/.venv/
+Backend/.pytest_cache/
+
+# ── OS / Editor ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/

@@ -1,0 +1,42 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: house_design_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: house_design
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app_network
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: mongo_express_ui
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      # Connexion de Mongo Express vers MongoDB
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin123@mongodb:27017/
+      
+      # Identifiants pour débloquer ton interface web (La fenêtre de ta capture)
+      # C'est ICI que tu définis ce qu'il faut taper dans la petite fenêtre grise
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: pass
+    depends_on:
+      - mongodb
+    networks:
+      - app_network
+
+volumes:
+  mongo_data:
+
+networks:
+  app_network:
