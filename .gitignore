@@ -1,3 +1,13 @@
+# ── Secrets — NEVER COMMIT (repo will be public) ──────────────────
+.env
+**/.env
+.env.*
+**/.env.*
+*.pem
+*.key
+secrets/
+credentials/
+
 # ── Unity ─────────────────────────────────────────────────────────
 Unity/[Ll]ibrary/
 Unity/[Tt]emp/
@@ -10,28 +20,37 @@ Unity/*.csproj
 Unity/*.sln
 Unity/*.suo
 Unity/*.user
+Unity/*.userprefs
 Unity/*.unityproj
+Unity/*.booproj
 Unity/.vs/
 Unity/.vsconfig
 Unity/.idea/
 Unity/UpgradeLog*.htm
 Unity/main_cam_editmode.png
-
-# Asset Store packages intentionally TRACKED (private repo, turnkey clone)
-# Keep these out only:
 Unity/Assets/_Recovery/
 Unity/Assets/Screenshots/
 
 # ── Backend (Python) ──────────────────────────────────────────────
 Backend/__pycache__/
+**/__pycache__/
 Backend/*.pyc
 Backend/*.log
-# Backend/.env intentionally tracked — private repo, keys included for convenience
+Backend/server.log
+Backend/server.err.log
+Backend/diag.log
 Backend/venv/
 Backend/.venv/
 Backend/.pytest_cache/
+
+# ── Agent / dev tooling — local artifacts, never push ─────────────
+.claude/
+.superpowers/
+**/.claude/
+**/.superpowers/
 
 # ── OS / Editor ───────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/

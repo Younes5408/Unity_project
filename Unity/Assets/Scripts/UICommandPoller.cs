@@ -33,23 +33,24 @@ public class UICommandPoller : MonoBehaviour
     {
         pollInterval = Mathf.Max(0.5f, pollInterval);
 
-        // Auto-discover house_id from VoiceRecorder if not explicitly set.
-        // This is the canonical source — VoiceRecorder is what tags every
-        // chat/audio request with house_id, so its value is what the backend
-        // queues commands under.
-        if (string.IsNullOrEmpty(houseId))
+        // ALWAYS sync to VoiceRecorder when present — VoiceRecorder is the
+        // canonical source of house_id (it tags every chat/audio request).
+        // A stale Inspector value here would silently break dashboard polling,
+        // so VoiceRecorder wins regardless of what the Inspector says.
+        var voice = FindObjectOfType<VoiceRecorder>();
+        if (voice != null && !string.IsNullOrEmpty(voice.houseId))
         {
-            var voice = FindObjectOfType<VoiceRecorder>();
-            if (voice != null && !string.IsNullOrEmpty(voice.houseId))
+            if (!string.IsNullOrEmpty(houseId) && houseId != voice.houseId)
             {
-                houseId = voice.houseId;
-                Debug.Log($"[UICommandPoller] Auto-discovered houseId='{houseId}' from VoiceRecorder.");
+                Debug.LogWarning($"[UICommandPoller] Inspector houseId='{houseId}' differs from VoiceRecorder.houseId='{voice.houseId}' — using VoiceRecorder's value to keep queues in sync.");
             }
-            else
-            {
-                houseId = "maison_001"; // last-resort default — must match VoiceRecorder's default
-                Debug.LogWarning($"[UICommandPoller] No VoiceRecorder found — falling back to houseId='{houseId}'.");
-            }
+            houseId = voice.houseId;
+            Debug.Log($"[UICommandPoller] houseId='{houseId}' (from VoiceRecorder).");
+        }
+        else if (string.IsNullOrEmpty(houseId))
+        {
+            houseId = "maison_001"; // last-resort default — must match VoiceRecorder's default
+            Debug.LogWarning($"[UICommandPoller] No VoiceRecorder found and Inspector empty — falling back to houseId='{houseId}'.");
         }
 
         StartCoroutine(PollLoop());

@@ -473,8 +473,9 @@ async def get_layout(house_id: str):
     try:
         rooms = [clean_doc(r) for r in rooms_col.find({}, projection={"_id": 0})]
         house = houses_col.find_one({"house_id": house_id}, projection={"_id": 0})
-        if not rooms:
-            raise HTTPException(status_code=404, detail="Aucune pièce trouvée.")
+        # Empty-state is NOT an error: a fresh house with no rooms yet is a
+        # valid state (user placing furniture before calling initialiser_maison).
+        # Returning 404 here spammed Unity logs every 2s with no-op polls.
         return {"status": "ok", "house": clean_doc(house), "rooms": rooms}
     except HTTPException:
         raise

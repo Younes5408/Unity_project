@@ -128,15 +128,14 @@ def speech_to_text(audio: "bytes | str", filename: str = "recording.wav") -> Opt
             audio_bytes = f.read()
         filename = audio
 
-    # ── Tier 1: Deepgram Nova-2 ──────────────────────────────────────────────
-    # Fastest free STT: consistent ~300-500ms p50. 200h/month on free plan.
+    # ── Tier 1: Deepgram Nova-3 ──────────────────────────────────────────────
+    # Fastest free STT: consistent ~300ms p50. 200h/month on free plan.
     # Uses the REST API directly — stable across all SDK versions.
     #
-    # Why nova-2 (not nova-3): nova-3 is English-first; its French model is
-    # newer and noticeably less accurate than nova-2 for natural conversational
-    # FR. We previously found that nova-2 with smart_format=true dropped short
-    # (<2s) utterances. Fix: keep nova-2 but disable smart_format AND punctuate
-    # to preserve every short fragment.
+    # REVERTED 2026-05-30: nova-2 + smart_format=false was returning empty for
+    # the user's typical short French utterances, forcing fallthrough to the
+    # slow Whisper tier (5-20s cold). nova-3 with detect_language=false was
+    # the May 26 working config — restoring it.
     if DEEPGRAM_API_KEY and _requests_available:
         try:
             resp = _requests.post(
@@ -146,10 +145,10 @@ def speech_to_text(audio: "bytes | str", filename: str = "recording.wav") -> Opt
                     "Content-Type": "audio/wav",
                 },
                 params={
-                    "model": "nova-2",
+                    "model": "nova-3",
                     "language": "fr",
+                    "detect_language": "false",
                     "punctuate": "true",
-                    # smart_format intentionally OFF — it drops short utterances
                 },
                 data=audio_bytes,
                 timeout=8,
@@ -169,9 +168,11 @@ def speech_to_text(audio: "bytes | str", filename: str = "recording.wav") -> Opt
     # ── Tier 2: Groq Whisper ─────────────────────────────────────────────────
     # Excellent quality, but free tier has 18k audio-second/hour limit and
     # occasionally queues requests (causing 5-20s cold latency).
+    # Hard 10s timeout (httpx default is none) — without it a queued request
+    # can hang the whole /api/chat/audio call past Unity's 60s ceiling.
     if GROQ_API_KEY and GroqClient:
         try:
-            client = GroqClient(api_key=GROQ_API_KEY)
+            client = GroqClient(api_key=GROQ_API_KEY, timeout=10.0)
             transcript = client.audio.transcriptions.create(
                 file=(filename, BytesIO(audio_bytes), "audio/wav"),
                 model="whisper-large-v3",
