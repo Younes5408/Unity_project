@@ -105,6 +105,45 @@ Le projet est divisé en deux briques logicielles communicantes : un **Client Un
 
 ---
 
+## 🧍 L'Avatar IA — Rigging et Machine d'États
+
+L'avatar 3D qui fait face au joueur et répond à ses requêtes est un modèle humanoïde **Mixamo Ch41** importé dans [Assets/Avatar/](file:///c:/Users/aya/Desktop/unityproject/Unity/Assets/Avatar/). Le mesh est skinné sur un squelette humanoïde standard.
+
+Son animation et son comportement sont pilotés par deux scripts clés :
+* **[AvatarController.cs](file:///c:/Users/aya/Desktop/unityproject/Unity/Assets/Avatar/Scripts/AvatarController.cs)** : Met à jour la variable entière `"AvatarState"` de l'Animator et gère les couleurs d'état affichées sur l'interface d'état de l'avatar.
+* **[AvatarEventBridge.cs](file:///c:/Users/aya/Desktop/unityproject/Unity/Assets/Avatar/Scripts/AvatarEventBridge.cs)** : Fait le pont entre les événements de cycle de vie de [VoiceRecorder.cs](file:///c:/Users/aya/Desktop/unityproject/Unity/Assets/Scripts/VoiceRecorder.cs) et le contrôleur de l'avatar.
+
+### Machine d'États d'Animation
+
+L'`Animator` de l'avatar (`Assets/Avatar/Animations/AvatarController.controller`) réagit à un paramètre entier `"AvatarState"` qui gère cinq états d'animation distincts :
+
+```
+   ┌──────┐  WakeUp   ┌────────┐   start   ┌──────┐
+   │ Sleep│ ────────▶ │ WakeUp │  (auto)   │ Idle │
+   └──┬───┘           └────────┘ ────────▶ └──┬───┘
+      │                                       │
+      │              ┌──────────┐             │ Think
+      └─────────────▶│ Thinking │◀────────────┘
+        Sleep        └────┬─────┘
+                          │ Talk
+                          ▼
+                     ┌──────────┐  silence (auto)
+                     │ Talking  │ ──────────────┐
+                     └──────────┘               │
+                          ▲                     │
+                          └─────────────────────┘
+                                  retour Idle
+```
+
+* **Sleep (1)** : État inactif de sommeil par défaut au lancement.
+* **WakeUp (2)** : Déclenché lors du premier appui sur le bouton push-to-talk. Une transition automatique le fait passer à `Idle` à la fin de l'animation de réveil.
+* **Idle (0)** : État d'attente active, l'avatar respire doucement en face du joueur.
+* **Thinking (3)** : Activé dès que l'enregistrement audio s'arrête et que le backend traite la requête (STT + appel de modèle). L'avatar croise les bras et penche la tête en signe de réflexion.
+* **Talking (4)** : Activé pendant la diffusion du flux audio Edge-TTS. Les lèvres bougent de façon synchrone et l'avatar fait des gestes de dialogue. Dès que la lecture audio s'achève, il retourne automatiquement à l'état `Idle`.
+
+---
+
+
 ## ⚙️ Les Cascades d'API (Résilience)
 
 Pour éviter qu'une panne d'API ou qu'un dépassement de quota (Rate Limit) ne bloque l'interaction, le backend implémente des pipelines de secours automatiques.
