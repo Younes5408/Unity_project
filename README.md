@@ -331,3 +331,69 @@ Vérification : `http://localhost:8000/api/status` doit retourner `{"status":"ok
 * **Changer la voix TTS** : modifier `EDGE_TTS_VOICE` dans `Backend/voice.py`.
 * **Étendre le corpus RAG** : ajouter des fichiers `.md` dans `Backend/knowledge_base/`.
 * **Ajuster la portée de saisie** : `HandPresence.pcGrabRadius` (défaut 0,35 m).
+
+---
+
+# Contributions de l'équipe — Archi-Agent VR
+
+Projet académique de conception architecturale en VR piloté par la voix, combinant un agent IA multi-fournisseurs, MongoDB, FastAPI et Unity 3D (Meta Quest).
+
+---
+
+## Aboubakr — Architecture Backend & API
+
+Aboubakr a conçu le serveur FastAPI (`api.py`) avec l'ensemble des endpoints (audio, layout, placements, analytics, statut), les middlewares CORS/GZip et la gestion des erreurs. Il a modélisé le schéma MongoDB (`database.py`) avec 8 collections et les indexes associés. Il a également implémenté le flag `_build_in_progress` qui empêche Unity de rendre des états partiels, et le mécanisme de calcul de position de construction 3m devant le joueur via injection de contexte (`contextvars`).
+
+---
+
+## Khadija — Agent IA & Ingénierie des Prompts
+
+Khadija a intégré le framework Agno avec une cascade 3 niveaux : Groq `llama-3.3-70b` → Groq `llama-3.1-8b` → Gemini `2.5-flash-lite`. Elle a rédigé les `AGENT_INSTRUCTIONS` couvrant la vision de scène, l'utilisation du RAG, le flux d'annulation, les règles de construction et le ton en français. Elle a déclaré les 10 outils de l'agent avec leurs descriptions, optimisé les prompts par modèle pour respecter les plafonds TPM, et implémenté la récupération défensive des appels d'outils (extraction JSON fallback) ainsi que la logique de désambiguïsation des commandes vocales ambiguës.
+
+---
+
+## Younes — STT/TTS, RAG, Outils, Spatial & Optimisation
+
+Younes a développé la pipeline vocale complète (`voice.py`) : Groq Whisper pour la transcription avec fallback Gemini, gTTS pour la synthèse avec nettoyage du texte. Il a conçu le système RAG BM25 pur Python (`rag.py`) indexant 9 fichiers markdown de normes architecturales françaises. Il a implémenté tous les outils de l'agent (`tools.py`), le système d'historique et d'annulation MongoDB (`history.py`), l'algorithme de placement de pièces (`spatial.py`) avec le correctif critique de convention d'angle Unity (sin/cos inversés), et le stockage de contexte per-requête (`scene_context.py`). Il a également optimisé la latence globale : prompt compact, async/await, timeout de 45s par fournisseur LLM avec fallback automatique.
+
+---
+
+## Aya — Catalogue de Préfabs, Meubles & Synchronisation
+
+Aya a développé le catalogue de 23+ objets 3D (`prefab_catalog.py`) et le système de placement avec stratégie `floor_aware` (raycast sol pour les meubles). Elle a intégré `CatalogMenu.cs` (menu VR toggleable, ouverture automatique sur requêtes ambiguës) et corrigé plusieurs bugs de placement (raycast y=50 → y=2.5). Elle a surtout assuré la synchronisation entre les trois couches du système — notamment le bug `object_type` vs `object_name` qui faisait échouer silencieusement tous les spawns — en auditant régulièrement la cohérence entre les réponses API Python, les scripts C# et la scène Unity.
+
+---
+
+## Salma — Mains VR & Interaction Physique
+
+Salma a intégré le package Animated Hands et développé `HandPresence.cs`, un contrôleur dual-mode : en VR, les mains lisent les inputs grip/trigger Meta Quest et animent les os des doigts en temps réel ; en mode PC, les touches J/H simulent les gestes avec détection OverlapSphere. Les trois états (Open, Closed, Pointing) sont unifiés entre les deux modes.
+
+---
+
+## Ghizlan — Avatar IA, Animation & HUD
+
+Ghizlan a importé et configuré le personnage Mixamo Ch41 (matériaux URP/Lit, 7 meshes) et conçu la machine à états animée à 5 états (Sleep → WakeUp → Idle → Thinking → Talking) avec toutes les transitions et les clips en loop. Elle a mis en place le rendu RenderTexture sur Layer 8 (512×512, fond transparent) et le canvas HUD WorldSpace attaché à la caméra — indispensable pour la visibilité en stéréo VR. Elle a câblé `AvatarEventBridge.cs` sur les événements vocaux et implémenté le support d'interruption (abandon de requête + redémarrage immédiat).
+
+---
+
+## Fatima — Scène 3D, Matériaux & Tableau de Bord
+
+Fatima a construit et maintenu la scène `MaMaison.unity` (terrain, éclairage, skybox, post-processing) et réalisé la migration de tous les shaders Autodesk Interactive vers URP/Lit pour compatibilité Meta Quest. Elle a ajouté les colliders manquants sur les ensembles cuisine (19 MeshColliders) et intégré tous les préfabs (maisons, meubles, décorations). Elle a développé `DashboardController.cs`, le tableau de bord WorldSpace affichant en temps réel les métriques de session depuis `/api/analytics/dashboard`.
+
+---
+
+## Tableau de propriété du code
+
+| Fichier | Responsable |
+|---|---|
+| `api.py`, `database.py`, `LayoutReceiver.cs` | Aboubakr |
+| `llm_agent.py` | Khadija |
+| `voice.py`, `rag.py`, `tools.py`, `history.py`, `spatial.py`, `scene_context.py`, `validator.py` | Younes |
+| `prefab_catalog.py`, `PrefabPlacer.cs`, `CatalogMenu.cs` | Aya |
+| `HandPresence.cs` | Salma |
+| `AvatarController.cs`, `AvatarEventBridge.cs`, `AvatarAnimator.controller` | Ghizlan |
+| `DashboardController.cs`, `MaMaison.unity` | Fatima |
+
+---
+
+*Projet académique — promotion 2025/2026.*
