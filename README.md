@@ -381,19 +381,3 @@ Ghizlan a importé et configuré le personnage Mixamo Ch41 (matériaux URP/Lit, 
 Fatima a construit et maintenu la scène `MaMaison.unity` (terrain, éclairage, skybox, post-processing) et réalisé la migration de tous les shaders Autodesk Interactive vers URP/Lit pour compatibilité Meta Quest. Elle a ajouté les colliders manquants sur les ensembles cuisine (19 MeshColliders) et intégré tous les préfabs (maisons, meubles, décorations). Elle a développé `DashboardController.cs`, le tableau de bord WorldSpace affichant en temps réel les métriques de session depuis `/api/analytics/dashboard`.
 
 ---
-
-## Tableau de propriété du code
-
-| Fichier | Responsable |
-|---|---|
-| `api.py`, `database.py`, `LayoutReceiver.cs` | Aboubakr |
-| `llm_agent.py` | Khadija |
-| `voice.py`, `rag.py`, `tools.py`, `history.py`, `spatial.py`, `scene_context.py`, `validator.py` | Younes |
-| `prefab_catalog.py`, `PrefabPlacer.cs`, `CatalogMenu.cs` | Aya |
-| `HandPresence.cs` | Salma |
-| `AvatarController.cs`, `AvatarEventBridge.cs`, `AvatarAnimator.controller` | Ghizlan |
-| `DashboardController.cs`, `MaMaison.unity` | Fatima |
-
----
-
-*Projet académique — promotion 2025/2026.*
